@@ -1,5 +1,6 @@
 package ru.Pavel;
 
+import org.apache.commons.math3.geometry.euclidean.threed.NotARotationMatrixException;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -18,8 +19,10 @@ public class SparkClass {
     private static final String SEPARATIONFORNAME = "\",";
     private static final int NAMEAIRPORT = 1;
     private static final int DESTINATIONAIRPORT = 0;
-    private static final int FIRSTAIRPORTID = 11;
+    private static final int AIRPORTID = 11;
     private static final int CANCELLED = 19;
+    private static final int DELAYARR =17;
+    private static final int DELAYAIRPORTID =14;
     private static final String CLEARSTR="";
     private static final float ZERO=0.0F;
 
@@ -37,7 +40,16 @@ public class SparkClass {
         JavaSparkContext sc = new JavaSparkContext(conf);
 
         JavaRDD<String> distOfAirportDelays = sc.textFile("664600583_T_ONTIME_sample.csv");
-        JavaRDD<String> distOfAirportName = sc.textFile("L_AIRPORT_ID.csv");dwl'/'
+        JavaRDD<String> distOfAirportName = sc.textFile("L_AIRPORT_ID.csv");
+        JavaPairRDD<Integer, String> dataOfAirportNames =
+                distOfAirportName
+                    .filter(str -> !str.contains("Code"))
+                    .mapToPair(value ->{
+                        String[] table = value.split(SEPARATIONFORNAME);
+                        Integer destAirportID = Integer.valueOf(table[DESTINATIONAIRPORT])
+                                .replaceAll("\",""");
+                        return new Tuple2<>(destAirportID, table[NAMEAIRPORT]);
+                    });
 
 
 
