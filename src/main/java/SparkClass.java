@@ -46,11 +46,23 @@ public class SparkClass {
                     .filter(str -> !str.contains("Code"))
                     .mapToPair(value ->{
                         String[] table = value.split(SEPARATIONFORNAME);
-                        Integer destAirportID = Integer.valueOf(table[DESTINATIONAIRPORT])
-                                .replaceAll("\",""");
+                        Integer destAirportID = Integer.valueOf(table[DESTINATIONAIRPORT]
+                                .replaceAll("\"",""));
                         return new Tuple2<>(destAirportID, table[NAMEAIRPORT]);
                     });
+        JavaPairRDD<Tuple2<Integer, Integer>, Serialization> dataOfAirportDelays =
+                distOfAirportDelays
+                    .filter(str -> !str.contains("YEAR"))
+                    .mapToPair(value ->{
+                        String[] table =value.split(SEPARATIONFORDELAYS);
+                        int
+                            }
 
+
+
+
+
+                            )
 
 
 
