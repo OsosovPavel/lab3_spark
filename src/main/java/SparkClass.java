@@ -55,7 +55,7 @@ public class SparkClass {
                     .filter(str -> !str.contains("YEAR"))
                     .mapToPair(value ->{
                         String[] table =value.split(SEPARATIONFORDELAYS);
-                        int mb
+                        int m
                             }
 
 
