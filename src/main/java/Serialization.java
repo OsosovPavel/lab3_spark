@@ -1,2 +1,2 @@
-public class Serializator {
+public class Serialization {
 }
