@@ -55,8 +55,13 @@ public class SparkClass {
                     .filter(str -> !str.contains("YEAR"))
                     .mapToPair(value ->{
                         String[] table =value.split(SEPARATIONFORDELAYS);
-                        int m
-                            }
+                        int destAIRID = Integer.parseInt(table[DESTINATIONAIRPORT]);
+                        int originalAIRID = Integer.parseInt(table[AIRPORTID]);
+                        float delayARR = checkNull(table[DELAYARR]);
+                        float cancel = Float.parseFloat(table[CANCELLED]);
+                        return new Tuple2<>(new Tuple2<>(originalAIRID, destAIRID),
+                                new Serialization(destAIRID, originalAIRID, delayARR, cancel));
+                    });
 
 
 
