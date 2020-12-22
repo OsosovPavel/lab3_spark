@@ -35,7 +35,8 @@ public class Analyze implements Serializable{
     }
 
     public static Analyze addValue(Analyze a, float maxDelayARR, boolean isDelay, boolean isCalled) {
-        return new Analyze(a.getCount0fFlight() + 1 :a.getCount0fDelay(),
+        return new Analyze(a.getCount0fFlight() + 1 ,
+                isDelay ? a.getCount0fDelay() + 1 : a.getCount0fDelay(),
                 Math.max(a.getMaxDelayARR(), maxDelayARR),
                 isCalled ? a.getCount0fCancel() + 1 : a.getCount0fCancel());
     }
