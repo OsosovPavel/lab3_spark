@@ -57,37 +57,37 @@ public class SparkClass {
                             String[] table = value.split(SEPARATIONFORDELAYS);
                             int destAIRID = Integer.parseInt(table[DESTINATIONAIRPORT]);
                             int originalAIRID = Integer.parseInt(table[AIRPORTID]);
-                            float delayARR = checkNull(table[DELAYARR]);
+                            float delayARR = checkClear(table[DELAYARR]);
                             float cancel = Float.parseFloat(table[CANCELLED]);
                             return new Tuple2<>(new Tuple2<>(originalAIRID, destAIRID),
                                     new Serialization(destAIRID, originalAIRID, delayARR, cancel));
                         });
 
         JavaPairRDD<Tuple2<Integer, Integer>, Analyze> analyze =
-                data0fAirportDelays
+                dataOfAirportDelays
                         .combineByKey(p -> new Analyze(1,
                                         p.getDelayARR() > ZERO ? 1 : 0,
                                         p.getDelayARR(),
                                         p.getCancel() == ZERO ? 0 : 1),
-                                (analyze, p) -> Analyze.addValue(analuze,
+                                (analyze_c, p) -> Analyze.addValue(analyze_c,
                                         p.getDelayARR(),
                                         p.getDelayARR() != ZERO,
                                         p.getCancel() != ZERO),
                                 Analyze::add);
-        JavaPairRDD<Tuple2<Integer, Integer>, String> AnalyzeStrings = Analyze
-                / mapToPair(value -> {
+        JavaPairRDD<Tuple2<Integer, Integer>, String> AnalyzeStrings = analyze
+                .mapToPair(value -> {
             value._2();
             return new Tuple2<>(value._1(), Analyze.to0utString(value._2()));
         });
 
         final Broadcast<Map<Integer, String>> broadcast = sc.broadcast(dataOfAirportNames.collectAsMap());
 
-        JavaRDD<String> out +AnalyzeStrings.map(value -> {
+        JavaRDD<String> out = AnalyzeStrings.map(value -> {
             Map<Integer, String> airportNames = broadcast.value();
 
             String aiportName0fStart = airportNames.get(value._1()._1());
             String aiportName0fFinish = airportNames.get(value._1()._2());
-            return aiportName0fStart + " -> " + aiportNames0fFinish + "\n" + value._2();
+            return aiportName0fStart + " -> " + aiportName0fFinish + "\n" + value._2();
         });
 
         out.saveAsTextFile("hdfs://localhost:9000/user/");
