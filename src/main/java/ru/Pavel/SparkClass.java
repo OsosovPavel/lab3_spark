@@ -90,6 +90,6 @@ public class SparkClass {
             return aiportName0fStart + " -> " + aiportName0fFinish + "\n" + value._2();
         });
 
-        out.saveAsTextFile("hdfs://localhost:9000/user/");
+        out.saveAsTextFile("hdfs://localhost:9000/user/pavel/output");
     }
 }
